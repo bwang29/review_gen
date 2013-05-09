@@ -12,7 +12,10 @@ $(function(){
 var counter = 50;
 
 function submit_comparison(){
-  if(counter == 0) return;
+  if(counter == 0){
+    $("button").show();
+    return;
+  }
   $("button").hide();
   var postObj = {}; 
   postObj.from_pid  = r_e(product_ids,null);//$("#sid").val();
@@ -21,7 +24,7 @@ function submit_comparison(){
   postObj.user_id   = r_e(user_ids,null);;
   postObj.aspect_id = r_e(aspects_ids,null);//$("#aid").val();
   postObj.score     = 1;
-  postObj.comment   = get_template().replace(/PRODUCT_FROM_ID/gi,products[postObj.from_pid].name).replace(/PRODUCT_TO_ID/gi,products[postObj.to_pid].name).replace(/ASPECT_ID/gi,products[postObj.aspect_id].name.toLowerCase());
+  postObj.comment   = get_template().replace(/PRODUCT_FROM_ID/gi,products[postObj.from_pid].name).replace(/PRODUCT_TO_ID/gi,products[postObj.to_pid].name).replace(/ASPECT_ID/gi,aspects[postObj.aspect_id].name.toLowerCase());
   console.log(postObj.comment);
   ws.makeGenericPOSTRequest(root_url+"compare/c", postObj, function(response){
       $("button").after(postObj.comment +" <br/>");
