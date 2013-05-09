@@ -9,7 +9,7 @@ $(function(){
   get_aspects();
   get_users();
 });
-var counter = 50;
+var counter = 2000;
 
 function submit_comparison(){
   if(counter == 0){
@@ -27,7 +27,8 @@ function submit_comparison(){
   postObj.comment   = get_template().replace(/PRODUCT_FROM_ID/gi,products[postObj.from_pid].name).replace(/PRODUCT_TO_ID/gi,products[postObj.to_pid].name).replace(/ASPECT_ID/gi,aspects[postObj.aspect_id].name.toLowerCase());
   console.log(postObj.comment);
   ws.makeGenericPOSTRequest(root_url+"compare/c", postObj, function(response){
-      $("button").after(postObj.comment +" <br/>");
+      console.log(counter);
+      console.log(postObj.comment);
       console.log(response);
       counter -= 1;
       submit_comparison();
@@ -63,13 +64,33 @@ function get_users(){
 
 function get_template(){
   var templates = $("#reason").val().split("/*n/");
-  return r_e(templates,null).trim();
+  //return r_e(templates,null).trim();
+  return r_multiple_e(templates,null).trim();
 }
 
 function r_e(items,ignore){
   var item;
   while(true){
     item = items[Math.floor(Math.random()*items.length)];
+    if(item != ignore || ignore == null) break;
+  }
+  return item;
+}
+
+function r_multiple_e(items,ignore){
+  var counter = 0;
+  var chosen_list = [];
+  var item = "";
+  while(counter < 2){
+    counter++;
+
+    var rnd_num = Math.floor(Math.random()*items.length);
+    while(chosen_list.indexOf(rnd_num)!=-1){
+        rnd_num = Math.floor(Math.random()*items.length);
+    }
+    chosen_list.push(rnd_num);
+
+    item = item + items[rnd_num] + "\n\n";
     if(item != ignore || ignore == null) break;
   }
   return item;
